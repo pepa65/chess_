@@ -17,5 +17,6 @@ nodrop = "0.1"
 thiserror = "2"
 
 [build-dependencies]
+chess = { package = "chess_", version = "3" }
 rand = { version = "0.10", default-features = false, features = ["std_rng"] }
 thiserror = "2"
