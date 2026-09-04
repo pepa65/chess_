@@ -1,5 +1,4 @@
-mod movegen;
-pub use self::movegen::*;
+mod generator;
+pub use self::generator::*;
 
 mod piece_type;
-pub use self::piece_type::*;

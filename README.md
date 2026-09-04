@@ -1,8 +1,14 @@
-# A Fast Chess Library In Rust
+[![version](https://img.shields.io/crates/v/chess_.svg)](https://crates.io/crates/chess_)
+[![build](https://github.com/pepa65/chess_/actions/workflows/rust.yml/badge.svg)](https://github.com/pepa65/chess_/actions/workflows/rust.yml)
+[![dependencies](https://deps.rs/repo/github/pepa65/chess_/status.svg)](https://deps.rs/repo/github/pepa65/chess_)
+[![docs](https://img.shields.io/badge/docs-chess_-blue.svg)](https://docs.rs/crate/chess_/latest)
+[![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/pepa65/chess_/blob/main/LICENSE)
+[![downloads](https://img.shields.io/crates/d/chess_.svg)](https://crates.io/crates/chess_)
 
-[![Build Status](https://travis-ci.org/jordanbray/chess.svg?branch=master)](https://travis-ci.org/jordanbray/chess)
-[![crates.io](https://img.shields.io/crates/v/chess.svg)](https://crates.io/crates/chess)
-[![docs.rs](https://docs.rs/chess/badge.svg)](https://jordanbray.github.io/chess/chess/)
+# chess_ 3.3.0
+**A Fast Chess Library In Rust**
+* Repo: https://github.com/pepa65/chess_
+* Fork of unmaintained `chess` crate: https://github.com/jordanbray/chess
 
 This library handles the process of move generation within a chess engine or chess UI.
 
@@ -13,15 +19,12 @@ This library follows semver for version numbering in the format MAJOR.MINOR.PATC
 * Any bug fixes or performance improvements that do not affect users will involve a PATCH version change.
 
 ## Requires Rust 1.31 or Greater
-
 This library requires rust version 1.27 or greater in order to check for the BMI2 instruction-set at compile-time.  Additionally, this build is compatible with rust 2018 which, I believe, requires rust 1.31.
 
 > Note: bmi2 has been disabled due to horrible performance on AMD architectures.  I have instead opted to expose the two relevant functions publicly if on a bmi2 CPU.
 
 ## Examples
-
 ### Incremental Move Generation With Capture/Non-Capture Sorting
-
 Here we iterate over all moves with incremental move generation.  The iterator below will generate moves as you are going through the list, which is ideal for situations where not all moves will be looked at (such as in an engine search function).
 
 ```rust
@@ -61,7 +64,6 @@ Here we iterate over all moves with incremental move generation.  The iterator b
 ```
 
 ### Setting up a position
-
 The `Board` structure tries to keep the position legal at all times.  This can be annoying when setting up a board, for example via user input.
 
 To deal with this, the `BoardBuilder` structure was introduced in 3.1.0. `BoardBuilder` structure follows a non-consuming builder pattern and can be converted to a `Result<Board, Error>` via `Board::try_from(...)` or `board_builder.try_into()`.
@@ -79,7 +81,6 @@ To deal with this, the `BoardBuilder` structure was introduced in 3.1.0. `BoardB
 ```
 
 ### Making a Move
-
 Here we make a move on the chess board.  The board is a copy-on-make structure, meaning every time you make a move, you create a new chess board.  You can use `board.make_move()` to update the current position, but you cannot unmake the move.  The board structure is optimized for size to reduce copy-time.
 
 ```rust
@@ -92,7 +93,6 @@ Here we make a move on the chess board.  The board is a copy-on-make structure, 
 ```
 
 ### Representing a Full Game
-
 There is more to chess than just what is on the board.  The `Game` object keeps track of the history of the game to allow draw offers, resignations, draw by 50 move rule, draw by repetition, and in general anything that needs the history of the game.
 
 ```rust
@@ -122,7 +122,6 @@ There is more to chess than just what is on the board.  The `Game` object keeps 
 ```
 
 ### FEN Strings
-
 `BoardBuilder`, `Board`, and `Game` all implement `FromStr` to allow you to convert an FEN string into the object.  Additionally, `BoardBuilder` and `Board` implement `std::fmt::Display` to convert them into an FEN string.
 
 ```rust
@@ -137,11 +136,9 @@ There is more to chess than just what is on the board.  The `Game` object keeps 
 ```
 
 ## Compile-time Options
-
 When compiling, I definitely recommend using RUSTFLAGS="-C target-cpu=native", specifically to gain access to the popcnt and ctzl instruction available on almost all modern CPUs.  This is used internally to figure out how many pieces are on a bitboard, and what square a piece is on respectively.  Because of the type system used here, these tasks become literally a single instruction.  Additionally, BMI2 is enabled on machines with the instructions by using this flag.
 
 ## BMI2
-
 As of version 1.0.3 of this library, the BMI2 instruction-set is used on machines that support it.  This speeds up the logic in two ways:
 * It uses built-in instructions to do the same logic that magic bitboards do.
 * It reduces cache load by storing moves in a u16 rather than a u64, which can be decompressed to a u64 with a single instruction.
@@ -149,12 +146,10 @@ As of version 1.0.3 of this library, the BMI2 instruction-set is used on machine
 On targets without BMI2, the library falls back on magic bitboards.  This is checked at compile-time.
 
 ## Shakmaty
-
 Another rust chess library is in the 'shakmaty' crate.  This is a great library, with many more features than this one.  It supports various chess variants, as well as the UCI protocol.  However, those features come at a cost, and this library performs consistently faster in all test cases I can throw at it.  To compare the two, I have added 'shakmaty' support to the 'chess_perft' application, and moved a bunch of benchmarks to that crate.  You can view the results at
 https://github.com/jordanbray/chess_perft.
 
 ## What It Does
-
 This library allows you to create a chess board from a FEN-formatted string, list all legal moves for the chess board and make moves.
 
 This library also allows you to view various pieces of board-state information such as castle rights.
@@ -162,14 +157,11 @@ This library also allows you to view various pieces of board-state information s
 This library has very fast move generation (the primary purposes of its existance), which will be optimized more.  All the tricks to make chess move generation fast are used.
 
 ## What It Does Not Do
-
 This is not a chess engine, just the move generator.  This is not a chess UI, just the move generator.  This is not a chess PGN parser, database, UCI communicator, XBOARD/WinBoard protocol, website or grandmaster.  Just a humble move generator.
 
 ## API Documentation
-
 ... is available at https://jordanbray.github.io/chess/chess/.
 
 ## Anything Else
-
 Nope.  Have fun.
 

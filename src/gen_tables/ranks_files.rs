@@ -24,60 +24,43 @@ static mut EDGES: BitBoard = EMPTY;
 
 // Generate the EDGES, RANKS, FILES, and ADJACENT_FILES variables for storage in the
 pub fn gen_bitboard_data() {
-    unsafe {
-        EDGES = ALL_SQUARES
-            .iter()
-            .filter(|x| {
-                x.get_rank() == Rank::First
-                    || x.get_rank() == Rank::Eighth
-                    || x.get_file() == ChessFile::A
-                    || x.get_file() == ChessFile::H
-            })
-            .fold(EMPTY, |v, s| v | BitBoard::from_square(*s));
-        for i in 0..8 {
-            RANKS[i] = ALL_SQUARES
-                .iter()
-                .filter(|x| x.get_rank().to_index() == i)
-                .fold(EMPTY, |v, s| v | BitBoard::from_square(*s));
-            FILES[i] = ALL_SQUARES
-                .iter()
-                .filter(|x| x.get_file().to_index() == i)
-                .fold(EMPTY, |v, s| v | BitBoard::from_square(*s));
-            ADJACENT_FILES[i] = ALL_SQUARES
-                .iter()
-                .filter(|y| {
-                    ((y.get_file().to_index() as i8) == (i as i8) - 1)
-                        || ((y.get_file().to_index() as i8) == (i as i8) + 1)
-                })
-                .fold(EMPTY, |v, s| v | BitBoard::from_square(*s));
-        }
-    }
+	unsafe {
+		EDGES = ALL_SQUARES
+			.iter()
+			.filter(|x| x.get_rank() == Rank::First || x.get_rank() == Rank::Eighth || x.get_file() == ChessFile::A || x.get_file() == ChessFile::H)
+			.fold(EMPTY, |v, s| v | BitBoard::from_square(*s));
+		for i in 0..8 {
+			RANKS[i] = ALL_SQUARES.iter().filter(|x| x.get_rank().to_index() == i).fold(EMPTY, |v, s| v | BitBoard::from_square(*s));
+			FILES[i] = ALL_SQUARES.iter().filter(|x| x.get_file().to_index() == i).fold(EMPTY, |v, s| v | BitBoard::from_square(*s));
+			ADJACENT_FILES[i] = ALL_SQUARES
+				.iter()
+				.filter(|y| ((y.get_file().to_index() as i8) == (i as i8) - 1) || ((y.get_file().to_index() as i8) == (i as i8) + 1))
+				.fold(EMPTY, |v, s| v | BitBoard::from_square(*s));
+		}
+	}
 }
 
 // Write the FILES array to the specified file.
 pub fn write_bitboard_data(f: &mut File) {
-    unsafe {
-        write!(f, "const FILES: [BitBoard; 8] = [\n").unwrap();
-        for i in 0..8 {
-            write!(f, "    BitBoard({}),\n", FILES[i].0).unwrap();
-        }
-        write!(f, "];\n").unwrap();
-        write!(f, "const ADJACENT_FILES: [BitBoard; 8] = [\n").unwrap();
-        for i in 0..8 {
-            write!(f, "    BitBoard({}),\n", ADJACENT_FILES[i].0).unwrap();
-        }
-        write!(f, "];\n").unwrap();
-        write!(f, "const RANKS: [BitBoard; 8] = [\n").unwrap();
-        for i in 0..8 {
-            write!(f, "    BitBoard({}),\n", RANKS[i].0).unwrap();
-        }
-        write!(f, "];\n").unwrap();
-        write!(f, "/// What are all the edge squares on the `BitBoard`?\n").unwrap();
-        write!(
-            f,
-            "pub const EDGES: BitBoard = BitBoard({});\n",
-            EDGES.0
-        )
-        .unwrap();
-    }
+	writeln!(f, "const FILES: [BitBoard; 8] = [").unwrap();
+	let fs = unsafe { FILES };
+	for i in &fs {
+		writeln!(f, "    BitBoard({}),", i.0).unwrap();
+	}
+	writeln!(f, "];").unwrap();
+	writeln!(f, "const ADJACENT_FILES: [BitBoard; 8] = [").unwrap();
+	let af = unsafe { ADJACENT_FILES };
+	for i in &af {
+		writeln!(f, "    BitBoard({}),", i.0).unwrap();
+	}
+	writeln!(f, "];").unwrap();
+	writeln!(f, "const RANKS: [BitBoard; 8] = [").unwrap();
+	let r = unsafe { RANKS };
+	for i in &r {
+		writeln!(f, "    BitBoard({}),", i.0).unwrap();
+	}
+	writeln!(f, "];").unwrap();
+	writeln!(f, "/// What are all the edge squares on the `BitBoard`?").unwrap();
+	let e0 = unsafe { EDGES.0 };
+	writeln!(f, "pub const EDGES: BitBoard = BitBoard({});", e0).unwrap();
 }

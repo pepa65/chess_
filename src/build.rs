@@ -18,5 +18,5 @@ mod square;
 use crate::gen_tables::generate_all_tables;
 // Generate everything.
 fn main() {
-    generate_all_tables();
+	generate_all_tables();
 }
