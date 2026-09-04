@@ -26,8 +26,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "chess"
-version = "3.2.0"
+name = "chess_"
+version = "3.3.0"
 dependencies = [
  "arrayvec",
  "nodrop",
