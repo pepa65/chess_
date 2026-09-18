@@ -5,7 +5,7 @@
 [![license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/pepa65/chess_/blob/main/LICENSE)
 [![downloads](https://img.shields.io/crates/d/chess_.svg)](https://crates.io/crates/chess_)
 
-# chess_ 3.3.0
+# chess_ 3.3.1
 **A Fast Chess Library In Rust**
 * Repo: https://github.com/pepa65/chess_
 * Fork of unmaintained `chess` crate: https://github.com/jordanbray/chess
